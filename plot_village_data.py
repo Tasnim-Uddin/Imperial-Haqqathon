@@ -7,7 +7,6 @@ import matplotlib.dates as mdates
 conn = sqlite3.connect('toothbrush_data.db')
 cursor = conn.cursor()
 
-
 # Function to fetch data for a given village ID
 def fetch_village_data(village_id):
     # First, get the village_week_ids and dates for the given village_id
@@ -33,7 +32,6 @@ def fetch_village_data(village_id):
 
     return df
 
-
 # Function to fetch data for all villages
 def fetch_all_village_data():
     query_all_villages = '''
@@ -55,30 +53,29 @@ def fetch_all_village_data():
 
     return all_data_df
 
-
 # Function to plot the data for a specific village
 def plot_village_data(df, plot_type):
     plt.figure(figsize=(10, 6))
 
     if plot_type == 'number':
-        plt.plot(df['week_start_date'], df['avg_num_brushes_per_day'], marker='o')
-        plt.ylabel('Average Number of Brushes per Day')
-        plt.title('Average Number of Brushes per Day per Week')
+        plt.plot(df['week_start_date'], df['avg_num_brushes_per_day'], linewidth=4)  # Thick line
+        plt.ylabel('Average Number of Brushes per Day', fontsize=15)  # Font size 15 for y-label
+        plt.title('Average Number of Brushes per Day per Week', fontsize=20)  # Font size 20 for title
     elif plot_type == 'time':
-        plt.plot(df['week_start_date'], df['avg_time_spent_brushing_per_day'], marker='o')
-        plt.ylabel('Average Time Spent Brushing per Day (seconds)')
-        plt.title('Average Time Spent Brushing per Day per Week')
+        plt.plot(df['week_start_date'], df['avg_time_spent_brushing_per_day'], linewidth=4)  # Thick line
+        plt.ylabel('Average Time Spent Brushing per Day (seconds)', fontsize=15)  # Font size 15 for y-label
+        plt.title('Average Time Spent Brushing per Day per Week', fontsize=20)  # Font size 20 for title
     else:
         print("Invalid plot type. Please enter 'number' or 'time'.")
         return
 
-    plt.xlabel('Week Start Date')
-    plt.xticks(rotation=45)
-    plt.gca().xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))  # Set interval for x-axis ticks
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))  # Format x-axis labels
+    plt.xlabel('Week Start Date', fontsize=15)  # Font size 15 for x-label
+    plt.xticks(rotation=0, fontsize=13)  # Font size 13 for x-ticks
+    plt.yticks(fontsize=13)  # Font size 13 for y-ticks
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=2))  # Set interval for x-axis ticks to every other month
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%B %Y'))  # Format x-axis labels as 'Month Year'
     plt.tight_layout()
     plt.show()
-
 
 # Function to plot the data for all villages on the same graph
 def plot_all_village_data(df, plot_type):
@@ -88,30 +85,28 @@ def plot_all_village_data(df, plot_type):
     for village in villages:
         village_data = df[df['village_id'] == village]
         if plot_type == 'number':
-            plt.plot(village_data['week_start_date'], village_data['avg_num_brushes_per_day'], marker='o',
-                     label=f'Village {village}')
+            plt.plot(village_data['week_start_date'], village_data['avg_num_brushes_per_day'], label=f'Village {village}', linewidth=4)  # Thick line
         elif plot_type == 'time':
-            plt.plot(village_data['week_start_date'], village_data['avg_time_spent_brushing_per_day'], marker='o',
-                     label=f'Village {village}')
+            plt.plot(village_data['week_start_date'], village_data['avg_time_spent_brushing_per_day'], label=f'Village {village}', linewidth=4)  # Thick line
         else:
             print("Invalid plot type. Please enter 'number' or 'time'.")
             return
 
     if plot_type == 'number':
-        plt.ylabel('Average Number of Brushes per Day')
-        plt.title('Average Number of Brushes per Day per Week for All Villages')
+        plt.ylabel('Average Number of Brushes per Day', fontsize=15)  # Font size 15 for y-label
+        plt.title('Average Number of Brushes per Day per Week for All Villages', fontsize=20)  # Font size 20 for title
     elif plot_type == 'time':
-        plt.ylabel('Average Time Spent Brushing per Day (seconds)')
-        plt.title('Average Time Spent Brushing per Day per Week for All Villages')
+        plt.ylabel('Average Time Spent Brushing per Day (seconds)', fontsize=15)  # Font size 15 for y-label
+        plt.title('Average Time Spent Brushing per Day per Week for All Villages', fontsize=20)  # Font size 20 for title
 
-    plt.xlabel('Week Start Date')
-    plt.xticks(rotation=45)
-    plt.gca().xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))  # Set interval for x-axis ticks
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))  # Format x-axis labels
-    plt.legend(title='Village ID')
+    plt.xlabel('Week Start Date', fontsize=15)  # Font size 15 for x-label
+    plt.xticks(rotation=0, fontsize=13)  # Font size 13 for x-ticks
+    plt.yticks(fontsize=13)  # Font size 13 for y-ticks
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=2))  # Set interval for x-axis ticks to every other month
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%B %Y'))  # Format x-axis labels as 'Month Year'
+    plt.legend(title='Village ID', fontsize=15)  # Font size 15 for legend
     plt.tight_layout()
     plt.show()
-
 
 # Main function
 def main():
@@ -130,7 +125,6 @@ def main():
             print(f"No data found for village ID '{village_id}'.")
         else:
             plot_village_data(df, plot_type)
-
 
 if __name__ == '__main__':
     main()
